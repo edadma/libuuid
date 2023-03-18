@@ -77,10 +77,52 @@ def generateRandomString: String =
   uuid_unparse(binuuid, uuid)
   fromCString(uuid)
 
+def generateString: String =
+  val binuuid = stackalloc[uuid_tp]()
+  val uuid = stackalloc[CChar](37)
+
+  uuid_generate(binuuid)
+  uuid_unparse(binuuid, uuid)
+  fromCString(uuid)
+
+def generateTimeString: String =
+  val binuuid = stackalloc[uuid_tp]()
+  val uuid = stackalloc[CChar](37)
+
+  uuid_generate_time(binuuid)
+  uuid_unparse(binuuid, uuid)
+  fromCString(uuid)
+
+def generateTimeSafeString: String =
+  val binuuid = stackalloc[uuid_tp]()
+  val uuid = stackalloc[CChar](37)
+
+  uuid_generate_time_safe(binuuid)
+  uuid_unparse(binuuid, uuid)
+  fromCString(uuid)
+
 def generateRandom: UUID =
   val binuuid = stackalloc[uuid_tp]()
 
   uuid_generate_random(binuuid)
+  fromUUID(binuuid)
+
+def generate: UUID =
+  val binuuid = stackalloc[uuid_tp]()
+
+  uuid_generate(binuuid)
+  fromUUID(binuuid)
+
+def generateTime: UUID =
+  val binuuid = stackalloc[uuid_tp]()
+
+  uuid_generate_time(binuuid)
+  fromUUID(binuuid)
+
+def generateTimeSafe: UUID =
+  val binuuid = stackalloc[uuid_tp]()
+
+  uuid_generate_time_safe(binuuid)
   fromUUID(binuuid)
 
 def parse(uu: String): Option[UUID] =

@@ -1,7 +1,7 @@
 package io.github.edadma.libuuid
 
 @main def run(): Unit =
-  val u = generateRandomString
+  val u = generateString
 
   println(u)
 
