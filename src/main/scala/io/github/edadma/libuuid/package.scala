@@ -37,7 +37,17 @@ class UUID private[libuuid] (val arr: Array[Byte]):
     uuid_unparse(binuuid, uuid)
     fromCString(uuid)
 
-  override def toString: String = s"UUID[type ${typ.value}; \"$unparse\"]"
+  override def toString: String =
+    val t =
+      typ match
+        case Type.NIL      => "0 (nil)"
+        case Type.TIME     => "1 (time)"
+        case Type.SECURITY => "2 (security)"
+        case Type.MD5      => "3 (MD5)"
+        case Type.RANDOM   => "4 (random)"
+        case Type.SHA1     => "5 (SHA1)"
+
+    s"UUID[type $t; \"$unparse\"]"
 end UUID
 
 private def fromUUID(uu: uuid_tp): UUID =
