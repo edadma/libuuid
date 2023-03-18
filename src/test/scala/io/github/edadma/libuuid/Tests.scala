@@ -37,3 +37,7 @@ class Tests extends AnyFreeSpec with Matchers:
   "generateRandomString/typ" in { parse(generateRandomString).get.typ shouldBe Type.RANDOM }
 
   "generateString/typ" in { parse(generateString).get.typ shouldBe Type.RANDOM }
+
+  "generateTimeString/typ" in { parse(generateTimeString).get.typ shouldBe Type.TIME }
+
+  "generateTimeSafeString/typ" in { parse(generateTimeSafeString).get.typ shouldBe Type.TIME }
