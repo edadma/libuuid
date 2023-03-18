@@ -16,7 +16,7 @@ object Type:
   final val SHA1 = new Type(5)
 
 class UUID private[libuuid] (val arr: Array[Byte]):
-  private def toUUID(uu: uuid_tp): Unit =
+  private def copy(uu: uuid_tp): Unit =
     var i = 0
 
     while i < 16 do
@@ -26,14 +26,14 @@ class UUID private[libuuid] (val arr: Array[Byte]):
   def typ: Type =
     val uuid = stackalloc[uuid_tp]()
 
-    toUUID(uuid)
+    copy(uuid)
     uuid_type(uuid)
 
   def unparse: String =
     val binuuid = stackalloc[uuid_tp]()
     val uuid = stackalloc[CChar](37)
 
-    toUUID(binuuid)
+    copy(binuuid)
     uuid_unparse(binuuid, uuid)
     fromCString(uuid)
 
