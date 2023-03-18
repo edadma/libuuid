@@ -29,6 +29,17 @@ class UUID private[libuuid] (val arr: Array[Byte]):
     toUUID(uuid)
     uuid_type(uuid)
 
+  def unparse: String =
+    val binuuid = stackalloc[uuid_tp]()
+    val uuid = stackalloc[CChar](37)
+
+    toUUID(binuuid)
+    uuid_unparse(binuuid, uuid)
+    fromCString(uuid)
+
+  override def toString: String = s"UUID[type ${typ.value}; \"$unparse\"]"
+end UUID
+
 private def fromUUID(uu: uuid_tp): UUID =
   val arr: Array[Byte] = new Array(16)
   var i = 0

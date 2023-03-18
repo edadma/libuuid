@@ -1,4 +1,10 @@
 package io.github.edadma.libuuid
 
 @main def run(): Unit =
-  println(generateRandomUnparse)
+  val u = generateRandomUnparse
+
+  println(u)
+
+  val p = parse(u)
+
+  println(p)
