@@ -3,6 +3,40 @@ package io.github.edadma.libuuid
 import scala.scalanative.unsafe._
 import io.github.edadma.libuuid.extern.LibUUID._
 
+implicit class Type(val value: CInt) extends AnyVal
+
+object Type:
+  final val NIL = new Type(0)
+  final val TIME = new Type(1)
+  final val SECURITY = new Type(2)
+  final val MD5 = new Type(3)
+  final val RANDOM = new Type(4)
+  final val SHA1 = new Type(5)
+
+class UUID private (val arr: Array[Byte]):
+  private def toUUID(uu: uuid_tp): Unit =
+    var i = 0
+
+    while i < 16 do
+      uu(i) = arr(i)
+      i += 1
+
+  def typ: Type =
+    val uuid = stackalloc[uuid_t]()
+
+    toUUID(uuid)
+    uuid_type(uuid)
+
+private def fromUUID(uu: uuid_tp): UUID =
+  val arr: Array[Byte] = new Array(16)
+  var i = 0
+
+  while i < 16 do
+    arr(i) = uu(i)
+    i += 1
+
+  new UUID(arr)
+
 def generateRandomUnparse: String =
   val binuuid = stackalloc[uuid_t]()
   val uuid = stackalloc[CChar](37)
@@ -10,3 +44,15 @@ def generateRandomUnparse: String =
   uuid_generate_random(binuuid)
   uuid_unparse(binuuid, uuid)
   fromCString(uuid)
+
+def generateRandom: UUID =
+  val binuuid = stackalloc[uuid_t]()
+
+  uuid_generate_random(binuuid)
+  fromUUID(binuuid)
+
+def parse(uu: String): Option[UUID] =
+  val binuuid = stackalloc[uuid_t]()
+
+  if Zone(implicit z => uuid_parse(toCString(uu) binuuid)) != 0 then None
+  else Some(fromUUID(binuuid))

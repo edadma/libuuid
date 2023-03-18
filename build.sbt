@@ -37,10 +37,7 @@ licenses := Seq("ISC" -> url("https://opensource.org/licenses/ISC"))
 
 homepage := Some(url("https://github.com/edadma/" + name.value))
 
-//libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.13" % "test"
-
-//libraryDependencies ++= Seq(
-//)
+libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.15" % "test"
 
 publishMavenStyle := true
 
