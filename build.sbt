@@ -1,4 +1,4 @@
-name := "-sn-template"
+name := "libuuid"
 
 version := "0.0.1"
 

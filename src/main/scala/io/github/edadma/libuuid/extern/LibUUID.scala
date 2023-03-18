@@ -1,4 +1,4 @@
-package io.github.edadma.libuuid
+package io.github.edadma.libuuid.extern
 
 import scala.scalanative.unsafe._, Nat._
 
@@ -7,3 +7,6 @@ import scala.scalanative.unsafe._, Nat._
 object LibUUID:
   type uuid_t = CArray[CUnsignedChar, Digit2[_1, _6]]
   type uuid_tp = Ptr[uuid_t]
+
+  def uuid_generate_random(out: uuid_tp): Unit = extern
+  def uuid_unparse(uu: uuid_tp, out: CString): Unit = extern
