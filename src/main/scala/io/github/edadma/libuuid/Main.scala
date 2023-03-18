@@ -1,4 +1,4 @@
-package io.github.edadma._sn_template
+package io.github.edadma.libuuid
 
 @main def run(): Unit =
   println("Scala Native is awesome!")
