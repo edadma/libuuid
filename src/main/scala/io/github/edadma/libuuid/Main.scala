@@ -8,3 +8,4 @@ package io.github.edadma.libuuid
   val p = parse(u)
 
   println(p)
+  println(p.get.typ == Type.TIME)
