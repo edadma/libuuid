@@ -4,23 +4,34 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 
 class Tests extends AnyFreeSpec with Matchers:
-  "parse" in {
-    parse("433afe80-8b40-41dc-9bde-61134946989e") shouldNot be(None)
-  }
+  val uu1: Option[UUID] = parse("433afe80-8b40-41dc-9bde-61134946989e")
+  val uu2: Option[UUID] = parse("433afe80-8b40-41dc-9bde-61134946989e")
+  val uu3: Option[UUID] = parse("433afe80-8b40-41dc-9bde-61134946989e")
+  val uu4: Option[UUID] = parse("115882e2-2404-41c2-a655-ecd79e58064e")
 
-  "Type.RANDOM" in {
-    parse("433afe80-8b40-41dc-9bde-61134946989e").get.typ shouldBe Type.RANDOM
-  }
+  "parse" in { uu1 should not be None }
 
-  "parse fail" in {
-    parse("bad UUID") shouldBe None
-  }
+  "inequality" in { uu1 should not equal uu4 }
+
+  "equality 1" in { uu1 shouldEqual uu2 }
+
+  "equality 2" in { uu2 shouldEqual uu3 }
+
+  "equality: reflexivity" in { uu1 shouldEqual uu1 }
+
+  "equality: symmetry" in { uu2 shouldEqual uu1 }
+
+  "equality: transitivity" in { uu1 shouldEqual uu3 }
+
+  "Type.RANDOM" in { uu1.get.typ shouldBe Type.RANDOM }
+
+  "parse fail" in { parse("bad UUID") shouldBe None }
 
   "generateRandomString/parse/unparse" in {
     val u = generateRandomString
     val p = parse(u).get
 
-    p.unparse shouldBe u
+    p.unparse shouldEqual u
   }
 
   "generateRandomString/typ" in {

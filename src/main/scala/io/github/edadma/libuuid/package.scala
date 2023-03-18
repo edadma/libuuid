@@ -15,7 +15,7 @@ object Type:
   final val RANDOM = new Type(4)
   final val SHA1 = new Type(5)
 
-class UUID private[libuuid] (val arr: Array[Byte]):
+class UUID private[libuuid] (private val arr: Array[Byte]) extends Equals:
   private def copy(uu: uuid_tp): Unit =
     var i = 0
 
@@ -36,6 +36,15 @@ class UUID private[libuuid] (val arr: Array[Byte]):
     copy(binuuid)
     uuid_unparse(binuuid, uuid)
     fromCString(uuid)
+
+  def canEqual(that: Any): Boolean = that.isInstanceOf[UUID]
+
+  override def equals(obj: Any): Boolean =
+    obj match
+      case that: UUID => that.canEqual(this) && this.arr.sameElements(that.arr)
+      case _          => false
+
+  override def hashCode: Int = java.util.Arrays.hashCode(arr)
 
   override def toString: String =
     val t =
