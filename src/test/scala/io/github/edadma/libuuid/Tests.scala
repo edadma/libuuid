@@ -3,8 +3,7 @@ package io.github.edadma.libuuid
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 
-class Tests extends AnyFreeSpec with Matchers {
-
+class Tests extends AnyFreeSpec with Matchers:
   "parse" in {
     parse("433afe80-8b40-41dc-9bde-61134946989e") shouldNot be(None)
   }
@@ -30,5 +29,3 @@ class Tests extends AnyFreeSpec with Matchers {
 
     p.typ shouldBe Type.RANDOM
   }
-
-}
