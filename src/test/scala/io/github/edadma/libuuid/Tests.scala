@@ -8,6 +8,7 @@ class Tests extends AnyFreeSpec with Matchers:
   val v42: Option[UUID] = parse("433afe80-8b40-41dc-9bde-61134946989e")
   val v43: Option[UUID] = parse("433afe80-8b40-41dc-9bde-61134946989e")
   val v44: Option[UUID] = parse("115882e2-2404-41c2-a655-ecd79e58064e")
+  val v0: Option[UUID] = parse("00000000-0000-0000-0000-000000000000")
 
   "parse" in { v41 should not be None }
 
@@ -41,3 +42,21 @@ class Tests extends AnyFreeSpec with Matchers:
   "generateTimeString/typ" in { parse(generateTimeString).get.typ shouldBe Type.TIME }
 
   "generateTimeSafeString/typ" in { parse(generateTimeSafeString).get.typ shouldBe Type.TIME }
+
+  "UUID.NULL 1" in { UUID.NULL.isNull shouldBe true }
+
+  "UUID.NULL 2" in { UUID.NULL shouldEqual v0.get }
+
+  "isNull" in { v41.get.isNull shouldBe false }
+
+  "md5/typ" in { v41.get.md5("foo").typ shouldBe Type.MD5 }
+
+  "md5 equality" in { v41.get.md5("foo") shouldEqual v42.get.md5("foo") }
+
+  "md5 inequality" in { v41.get.md5("foo") should not equal v41.get.md5("bar") }
+
+  "sha1/typ" in { v41.get.sha1("foo").typ shouldBe Type.SHA1 }
+
+  "sha1 equality" in { v41.get.sha1("foo") shouldEqual v42.get.sha1("foo") }
+
+  "sha1 inequality" in { v41.get.sha1("foo") should not equal v41.get.sha1("bar") }
