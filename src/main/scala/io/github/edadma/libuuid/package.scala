@@ -50,7 +50,7 @@ private def fromUUID(uu: uuid_tp): UUID =
 
   new UUID(arr)
 
-def generateRandomUnparse: String =
+def generateRandomString: String =
   val binuuid = stackalloc[uuid_tp]()
   val uuid = stackalloc[CChar](37)
 
