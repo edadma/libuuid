@@ -1,18 +1,12 @@
 name := "libuuid"
 
-version := "0.0.1"
+version := "0.0.2"
 
 versionScheme := Some("early-semver")
 
-scalaVersion := "3.2.2"
+scalaVersion := "3.5.2"
 
 enablePlugins(ScalaNativePlugin)
-
-nativeLinkStubs := true
-
-nativeMode := "debug"
-
-nativeLinkingOptions := Seq(s"-L${baseDirectory.value}/native-lib")
 
 scalacOptions ++= Seq(
   "-deprecation",
@@ -37,7 +31,7 @@ licenses := Seq("ISC" -> url("https://opensource.org/licenses/ISC"))
 
 homepage := Some(url("https://github.com/edadma/" + name.value))
 
-libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.15" % "test"
+libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.19" % "test"
 
 publishMavenStyle := true
 

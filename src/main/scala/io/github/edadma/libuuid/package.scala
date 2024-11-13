@@ -8,12 +8,12 @@ import io.github.edadma.libuuid.extern.LibUUID._
 implicit class Type(val value: CInt) extends AnyVal
 
 object Type:
-  final val NIL = new Type(0)
-  final val TIME = new Type(1)
+  final val NIL      = new Type(0)
+  final val TIME     = new Type(1)
   final val SECURITY = new Type(2)
-  final val MD5 = new Type(3)
-  final val RANDOM = new Type(4)
-  final val SHA1 = new Type(5)
+  final val MD5      = new Type(3)
+  final val RANDOM   = new Type(4)
+  final val SHA1     = new Type(5)
 
 object UUID:
   val NULL = new UUID(new Array[Byte](16))
@@ -34,7 +34,7 @@ class UUID private[libuuid] (private val arr: Array[Byte]) extends Equals:
 
   def unparse: String =
     val binuuid = stackalloc[uuid_t]()
-    val uuid = stackalloc[CChar](37)
+    val uuid    = stackalloc[CChar](37)
 
     copy(binuuid)
     uuid_unparse(binuuid, uuid)
@@ -42,7 +42,7 @@ class UUID private[libuuid] (private val arr: Array[Byte]) extends Equals:
 
   def unparseLower: String =
     val binuuid = stackalloc[uuid_t]()
-    val uuid = stackalloc[CChar](37)
+    val uuid    = stackalloc[CChar](37)
 
     copy(binuuid)
     uuid_unparse_lower(binuuid, uuid)
@@ -50,26 +50,26 @@ class UUID private[libuuid] (private val arr: Array[Byte]) extends Equals:
 
   def unparseUpper: String =
     val binuuid = stackalloc[uuid_t]()
-    val uuid = stackalloc[CChar](37)
+    val uuid    = stackalloc[CChar](37)
 
     copy(binuuid)
     uuid_unparse_upper(binuuid, uuid)
     fromCString(uuid)
 
   def md5(name: String): UUID =
-    val in = stackalloc[uuid_t]()
+    val in  = stackalloc[uuid_t]()
     val out = stackalloc[uuid_t]()
 
     copy(in)
-    Zone(implicit z => uuid_generate_md5(out, in, toCString(name), name.length.toULong))
+    Zone { uuid_generate_md5(out, in, toCString(name), name.length.toCSize) }
     fromUUID(out)
 
   def sha1(name: String): UUID =
-    val in = stackalloc[uuid_t]()
+    val in  = stackalloc[uuid_t]()
     val out = stackalloc[uuid_t]()
 
     copy(in)
-    Zone(implicit z => uuid_generate_sha1(out, in, toCString(name), name.length.toULong))
+    Zone { uuid_generate_sha1(out, in, toCString(name), name.length.toCSize) }
     fromUUID(out)
 
   def isNull: Boolean = arr forall (_ == 0)
@@ -98,7 +98,7 @@ end UUID
 
 private def fromUUID(uu: uuid_t): UUID =
   val arr: Array[Byte] = new Array(16)
-  var i = 0
+  var i                = 0
 
   while i < 16 do
     arr(i) = uu(i).toByte
@@ -108,7 +108,7 @@ private def fromUUID(uu: uuid_t): UUID =
 
 def generateRandomString: String =
   val binuuid = stackalloc[uuid_t]()
-  val uuid = stackalloc[CChar](37)
+  val uuid    = stackalloc[CChar](37)
 
   uuid_generate_random(binuuid)
   uuid_unparse(binuuid, uuid)
@@ -116,7 +116,7 @@ def generateRandomString: String =
 
 def generateString: String =
   val binuuid = stackalloc[uuid_t]()
-  val uuid = stackalloc[CChar](37)
+  val uuid    = stackalloc[CChar](37)
 
   uuid_generate(binuuid)
   uuid_unparse(binuuid, uuid)
@@ -124,7 +124,7 @@ def generateString: String =
 
 def generateTimeString: String =
   val binuuid = stackalloc[uuid_t]()
-  val uuid = stackalloc[CChar](37)
+  val uuid    = stackalloc[CChar](37)
 
   uuid_generate_time(binuuid)
   uuid_unparse(binuuid, uuid)
@@ -132,7 +132,7 @@ def generateTimeString: String =
 
 def generateTimeSafeString: String =
   val binuuid = stackalloc[uuid_t]()
-  val uuid = stackalloc[CChar](37)
+  val uuid    = stackalloc[CChar](37)
 
   uuid_generate_time_safe(binuuid)
   uuid_unparse(binuuid, uuid)
@@ -165,5 +165,5 @@ def generateTimeSafe: UUID =
 def parse(uu: String): Option[UUID] =
   val binuuid = stackalloc[uuid_t]()
 
-  if Zone(implicit z => uuid_parse(toCString(uu), binuuid)) != 0 then None
+  if Zone { uuid_parse(toCString(uu), binuuid) } != 0 then None
   else Some(fromUUID(binuuid))
